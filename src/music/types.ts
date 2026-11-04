@@ -31,7 +31,5 @@ export interface Sound {
   volume: number;
   brightness: number;
   richness: number;
-  resonance: number;
   vibrato: number;
-  harmonics: number[];
 }

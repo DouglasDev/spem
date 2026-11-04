@@ -23,20 +23,29 @@ browser features needed for reliable audio startup and wake lock.
   some extra weight, and prefers keeping a useful current part. Selection changes
   at annotated phrase boundaries, including four-bar subdivisions.
 - **Fixed part** selects exactly one of eight choirs × five voice types. Tap a
-  cell in the choir grid or use the dropdown. The cells show activity in the
+  cell in the collapsed **Parts** choir grid or use the dropdown. The cells show activity in the
   written score, **not connected phones**.
-- Adjust volume, brightness, harmonic richness, vowel resonance and vibrato.
-  **Edit harmonics** exposes eight upper-partial levels, starting with the
-  fundamental. Sound settings and fixed part selection persist on the device.
+- Shape the brass sound with two XY touch pads. The first combines **volume**
+  (vertical) and **brightness** (horizontal). The second combines **vibrato**
+  (vertical) and **harmonic richness** (horizontal). Drag to change both axes;
+  arrow keys also work, with Shift for larger changes.
+- The synth uses detuned saw/pulse/triangle layers, slow pitch drift, a brassy
+  attack/decay filter envelope, and oversampled saturation. Vowel filtering is
+  removed. Volume and performance preferences survive the sound migration.
+- Part selection and timing/settings start collapsed. The main controls fit
+  one small portrait phone screen; expanding details can scroll. On short,
+  wide screens, the pads sit side by side.
+- **Share** opens a QR-code dialog and a copyable public app link. The QR always
+  uses the published HTTPS URL, including when previewing on localhost.
 - Six ornament buttons queue one figure on the next unscheduled beat. A later
   press replaces an unfinished queued figure. The amount controls its duration;
   EDM gates also use it for depth. Written rests remain silent and the original
   line resumes within one beat. No second part is layered onto the phone.
-- **Calibration pulse** temporarily replaces the voice with beat pulses. Compare
+- Open **Settings → Calibration pulse** to temporarily replaces the voice with beat pulses. Compare
   nearby phones and adjust **Timing offset** (negative = earlier, positive =
   later). Return to the voice when aligned.
 - **Mute** stops this phone, not the global timeline. After hiding the page,
-  locking the phone, or another audio interruption, tap **Rejoin performance**.
+  locking the phone, or another audio interruption, tap **Rejoin**.
 
 There is no server, user account, microphone permission, or precise location
 access. The region label uses the browser’s IANA time zone. It can be inaccurate
@@ -101,7 +110,7 @@ enforces blank-line spacing; Oxfmt handles the remaining formatting.
 
 - `src/music`: score types, timeline lookup, weighted assignment, ornaments.
 - `src/sync`: external clock estimation and approximate region label.
-- `src/audio`: monophonic additive voice and lookahead scheduler.
+- `src/audio`: monophonic brass voice and lookahead scheduler.
 - `src/components`: accessible controls and small Linaria styled components.
 - `src/state`: persisted Zustand sound/performance settings.
 

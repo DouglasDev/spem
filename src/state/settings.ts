@@ -4,11 +4,9 @@ import type { Sound } from '../music/types';
 
 export const defaultSound: Sound = {
   volume: 0.55,
-  brightness: 0.36,
-  richness: 0.42,
-  resonance: 0.3,
-  vibrato: 0.2,
-  harmonics: [1, 0.55, 0.3, 0.22, 0.12, 0.08, 0.04, 0.02],
+  brightness: 0.57,
+  richness: 0.68,
+  vibrato: 0.18,
 };
 
 interface Settings {
@@ -29,7 +27,7 @@ interface Settings {
 export const useSettings = create<Settings>()(
   persist(
     (set) => ({
-      sound: { ...defaultSound, harmonics: [...defaultSound.harmonics] },
+      sound: { ...defaultSound },
       mode: 'auto',
       part: 0,
       seed: crypto.getRandomValues(new Uint32Array(1))[0],
@@ -40,10 +38,19 @@ export const useSettings = create<Settings>()(
       setPart: (part) => set({ part, mode: 'fixed' }),
       setOffset: (offset) => set({ offset }),
       setAmount: (amount) => set({ amount }),
-      resetSound: () => set({ sound: { ...defaultSound, harmonics: [...defaultSound.harmonics] } }),
+      resetSound: () => set({ sound: { ...defaultSound } }),
     }),
     {
       name: 'spem-in-alium-v1',
+      version: 2,
+      migrate: (previous) => {
+        const saved = previous as Partial<Settings>;
+
+        return {
+          ...saved,
+          sound: { ...defaultSound, volume: saved.sound?.volume ?? defaultSound.volume },
+        };
+      },
       storage: createJSONStorage(() => localStorage),
       partialize: ({ sound, mode, part, seed, offset, amount }) => ({
         sound,
