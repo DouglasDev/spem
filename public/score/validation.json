@@ -1,0 +1,11 @@
+{
+  "parts": 40,
+  "measuresPerPart": 138,
+  "totalMeasures": 5520,
+  "beatUnit": "half note",
+  "beats": 552,
+  "sourceNoteheads": 9713,
+  "mergedTieContinuations": 570,
+  "runtimeNotes": 9143,
+  "sourceSha256": "35af99704e7ab8e5a301ea44f7c6c1d1435126e97a0d679c91cd6adcf22a55e4"
+}
