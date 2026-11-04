@@ -112,15 +112,15 @@ part-change recovery, ornament return, and offline audio rendering/clipping.
 
 ## GitHub Pages
 
-The app targets `https://DouglasDev.github.io/spem-in-alium/`. No secrets or
+The app targets `https://DouglasDev.github.io/spem/`. No secrets or
 backend are needed. A GitHub account with repository administration and Pages
 access is needed to publish.
 
-1. Create an empty **public** repository named `spem-in-alium` under `DouglasDev`.
+1. Create an empty **public** repository named `spem` under `DouglasDev`.
 2. Push this project’s `main` branch:
 
    ```sh
-   git remote add origin git@github.com:DouglasDev/spem-in-alium.git
+   git remote add origin git@github.com:DouglasDev/spem.git
    git push -u origin main
    ```
 
@@ -143,7 +143,7 @@ GITHUB_ACTIONS=true pnpm build
 GITHUB_ACTIONS=true pnpm preview
 ```
 
-Open the printed preview host with `/spem-in-alium/` appended.
+Open the printed preview host with `/spem/` appended.
 
 ## Verification still requiring physical devices
 
