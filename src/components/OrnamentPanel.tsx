@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Ornament } from '../music/types';
 import { useSettings } from '../state/settings';
 import { Slider } from './Slider';
@@ -34,6 +34,14 @@ export function OrnamentPanel({
   const { amount, setAmount } = useSettings();
   const [queued, setQueued] = useState<Ornament>();
 
+  useEffect(() => {
+    if (!queued) return;
+
+    const timer = setTimeout(() => setQueued(undefined), 3000);
+
+    return () => clearTimeout(timer);
+  }, [queued]);
+
   return (
     <OrnamentSection>
       <PanelHead>
@@ -68,7 +76,7 @@ export function OrnamentPanel({
         {playing && queued
           ? `${ornaments.find((item) => item.kind === queued)?.name} requested. `
           : ''}
-        Figures last one beat and preserve written rests.
+        Figures last up to one beat and preserve written rests.
       </Muted>
     </OrnamentSection>
   );

@@ -68,7 +68,7 @@ export function usePerformance() {
 
     const timer = setInterval(() => {
       setState((current) => {
-        if (current.playing) return current;
+        if (current.playing || !clock.current?.available()) return current;
 
         const beat = position(score, clock.current!.now());
         const settings = useSettings.getState();

@@ -1,4 +1,11 @@
 {
   "singleQuote": true,
-  "ignorePatterns": ["pnpm-lock.yaml", "dist/**", ".vite-cache/**", ".husky/_/**"]
+  "ignorePatterns": [
+    "pnpm-lock.yaml",
+    "dist/**",
+    ".vite-cache/**",
+    ".husky/_/**",
+    "public/score/tallis.json",
+    "public/score/validation.json"
+  ]
 }

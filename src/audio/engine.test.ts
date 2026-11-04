@@ -46,10 +46,16 @@ const score: Score = JSON.parse(
   readFileSync(new URL('../../public/score/tallis.json', import.meta.url), 'utf8'),
 );
 
+let latency = 0;
+
 class Context {
   state = 'running';
   baseLatency = 0;
-  outputLatency = 0;
+
+  get outputLatency() {
+    return latency;
+  }
+
   onstatechange?: () => void;
 
   get currentTime() {
@@ -57,7 +63,10 @@ class Context {
   }
 
   getOutputTimestamp() {
-    return { contextTime: this.currentTime, performanceTime: performance.now() };
+    return {
+      contextTime: Math.max(0, this.currentTime - latency),
+      performanceTime: performance.now(),
+    };
   }
 
   async resume() {}
@@ -75,11 +84,13 @@ beforeEach(() => {
   vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval', 'performance'] });
   vi.clearAllMocks();
   hidden = false;
+  latency = 0;
   skew = 0;
   revision = 0;
   harness.settings.part = 0;
   harness.settings.mode = 'fixed';
   harness.settings.amount = 1;
+  harness.settings.offset = 0;
   vi.stubGlobal('AudioContext', Context);
   vi.stubGlobal('navigator', {});
 
@@ -112,6 +123,19 @@ afterEach(() => {
 });
 
 describe('Audio scheduling and recovery', () => {
+  it('schedules ahead far enough for slow outputs and negative manual compensation', async () => {
+    latency = 0.6;
+    harness.settings.offset = -100;
+
+    await engine.join();
+    await vi.advanceTimersByTimeAsync(2800);
+
+    const sounding = harness.note.mock.calls.find(([midi]) => midi === 74);
+
+    expect(sounding).toBeDefined();
+    expect(sounding![2]).toBeCloseTo((2 * 60) / score.bpm - 0.7, 3);
+  });
+
   it('joins mid-score, preserves the opening rest, and does not reattack a tied note', async () => {
     await engine.join();
     await vi.advanceTimersByTimeAsync(2800);

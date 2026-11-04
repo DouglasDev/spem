@@ -84,7 +84,10 @@ export class EnsembleEngine {
 
   private async keepAwake() {
     try {
-      this.wakeLock = await navigator.wakeLock?.request('screen');
+      const lock = await navigator.wakeLock?.request('screen');
+
+      if (this.playing) this.wakeLock = lock;
+      else void lock?.release();
     } catch {
       /* Unsupported or denied. */
     }
@@ -122,7 +125,7 @@ export class EnsembleEngine {
 
     this.synth?.silence();
     this.cancelPulses();
-    this.nextTick = Math.ceil(absoluteBeat(this.score, this.clock.now() + 180) * 8);
+    this.nextTick = Math.ceil(absoluteBeat(this.score, this.clock.now() + this.leadMs()) * 8);
     this.phrase = -1;
     this.lastKey = '';
     this.pending = undefined;
@@ -137,6 +140,12 @@ export class EnsembleEngine {
     const safeBeat = absoluteBeat(this.score, this.clock.now() + 250);
 
     this.pending = { kind, start: Math.ceil(Math.max(safeBeat, this.nextTick / 8)) };
+  }
+
+  private leadMs() {
+    const latency = this.context?.outputLatency || this.context?.baseLatency || 0;
+
+    return Math.max(180, latency * 1000 - Math.min(0, useSettings.getState().offset) + 80);
   }
 
   setCalibration(enabled: boolean) {
@@ -189,7 +198,7 @@ export class EnsembleEngine {
     while (this.audibleStates.length && this.audibleStates[0].utc <= now)
       this.changed(this.audibleStates.shift()!.state);
 
-    const horizon = absoluteBeat(this.score, now + 300);
+    const horizon = absoluteBeat(this.score, now + this.leadMs() + 150);
 
     while (this.nextTick / 8 < horizon) {
       const absolute = this.nextTick / 8;
